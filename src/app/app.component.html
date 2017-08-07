@@ -1,0 +1,86 @@
+<div class="container">
+  <div class="row">
+    <div class="col-xs-12 col-sm-10 col-md-8 col-sm-offset-1 col-md-offset-2">
+      <!-- add this to get access to form data -->
+      <form (ngSubmit)="onSubmit(form)" #form="ngForm">
+        <!-- this div surrounds all my inputs and when used with ngModelGroup can put all input values into an object -->
+        <div 
+          id="user-data" 
+          ngModelGroup="userData"
+          #userData="ngModelGroup">
+          <div class="form-group">
+            <label for="username">Username</label>
+            <input 
+              type="text" 
+              id="username" 
+              class="form-control" 
+              ngModel 
+              name="username"
+              required
+              #usernameProps="ngModel">
+          </div>
+            <!-- use local reference # and ngModel to get properties for the input which we can then use for error handling below (show error sentance if certain conditions met) -->
+          <p *ngIf="!usernameProps.valid && usernameProps.touched">Please Enter a Valid Value</p>
+          <button 
+            (click)="suggestUserName()"
+            class="btn btn-default" 
+            type="button">Suggest an Username</button>
+          <div class="form-group">
+            <label for="email">Mail</label>
+            <!-- required, email must be filled in and be a correct email address; we also get some classes added ng-invalidate, etc (see console) when not valid, you can style these classes if you want -->
+            <input 
+              type="email" 
+              id="email" 
+              class="form-control"
+              name="email"
+              ngModel
+              required
+              email>
+          </div>
+        </div>
+        <div class="form-group">
+          <textarea 
+            class="form-control"
+            name="questionAnswer" 
+            rows="3"
+            [(ngModel)]="answer">
+          </textarea>
+        <p>Your Reply: {{ answer }}</p>
+        </div>
+        <div class="form-group">
+          <label for="secret">Secret Questions</label>
+          <select 
+            id="secret" 
+            class="form-control"
+            name="secret"
+            [ngModel]="defaultValue">
+            <option value="pet">Your first Pet?</option>
+            <option value="teacher">Your first teacher?</option>
+          </select>
+        </div>
+        <div class="radio" *ngFor="let gender of genders">
+          <label>
+            <input 
+              type="radio" 
+              name="gender" 
+              ngModel 
+              [value]="gender">
+              {{ gender }}
+          </label>
+        </div>
+        <!-- form (if look at all its properties in console) has a disabled property.  if form is valid (also another property on form element, then allow form to be submitted) button will be greyed out if form not valid -->
+        <button 
+          class="btn btn-primary" 
+          type="submit"
+          [disabled]="!form.valid">Submit</button>
+      </form>
+    </div>
+  </div>
+</div>
+
+<h4 *ngIf="!userData.valid && userData.touched">You did not input anything valid!</h4>
+<div style="text-align: center">
+  <div>{{ username }}</div>
+  <div>{{ email }}</div>
+  <div>{{ secret }}</div>
+</div>
